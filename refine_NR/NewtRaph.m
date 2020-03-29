@@ -11,19 +11,25 @@ while conv==0;
   I=0;
   while I<2^IT; % loop over sub-timesteps
   S0=S; dsn=1; it=0; I=I+1;
-    while dsn>1e-5 & it<25;           % Newton-Raphson iteration
+    while dsn>1e-5 && it<10;           % Newton-Raphson iteration
       [Mw,Mo,dMw,dMo]=RelPerm(S,Fluid); % mobilities and derivatives
       df=dMw./(Mw + Mo)-Mw./(Mw+Mo).^2.*(dMw+dMo);  % df w/ds
       dG=speye(N)-B*spdiags(df,0,N,N); %G’(S)
 
       fw = Mw./(Mw+Mo);    % fractional flow
       G = S-S0-(B*fw+fi);  % G(s)
-      ds = -dG\G;          % increment ds
+      ds = -dG\G;          % increment ds      
+      % in matlab/octave, solve (A*x = b) with 'x = A \ b', rather than 'x = inv (A) * b'.
+      % Therefore, dG*ds + G = 0
+      % A => -dG, x => ds, b =>G
+      % using gmres
+      iter =0
+      %[ds, flag, reires,iter,resvec] = gmres(-dG, G, 100, rtol=1.e-10);
       S = S+ds;            % update S
       dsn = norm(ds);      % norm of increment
       it = it+1;           % number of N-R iterations
     end 
-    printf("Iterations at NR = %d \n ",it)
+    printf("Iterations at NR = %d  iterations at GMRES=%d\n ",it, sum(iter));
     prop.nl_it = [prop.nl_it, it];
     if dsn>1e-3; I=2^IT; S=S00; end
   end

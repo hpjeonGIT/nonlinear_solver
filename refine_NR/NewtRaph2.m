@@ -1,4 +1,6 @@
 % modification by jeonb
+% Applying inexact Netwon :  
+% https://numhpc.org/hiflow3/fileadmin/tutorials/2.0/tut_inexact_newton_method.pdf
 function S=NewtRaph2(Grid,S,Fluid,V,q,T);
 N = Grid.Nx*Grid.Ny*Grid.Nz; % number of unknowns
 A = GenA(Grid,V,q);          % system matrix
@@ -20,8 +22,14 @@ while conv==0;
 
       fw = Mw./(Mw+Mo);    % fractional flow
       G = S-S0-(B*fw+fi);  % G(s)
-      ds = -dG\G;          % increment ds
-      % in matlab/octave, solve (A*x = b) with 'Y = A \ b', rather than 'Y = inv (A) * b'.
+      % ds = -dG\G;          % increment ds % NR
+      % in matlab/octave, solve (A*x = b) with 'x = A \ b', rather than 'x = inv (A) * b'.
+      % Therefore, dG*ds + G = 0
+      % A => dG, x => ds, b =>G
+      % inexact newton
+      ds = S - S0;
+      r = norm(dG*ds + G)/norm(G);
+      if 
       S = S+ds;            % update S
       dsn = norm(ds);      % norm of increment
       it = it+1;           % number of N-R iterations
