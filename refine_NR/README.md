@@ -48,3 +48,12 @@ save Udata.mat KU pU
 - Run list_11 from Octave Command window
 ![final_snapshot](./figure1.png)
 - plot(prop.nl_it) # plotting nonlinear iterations
+
+## Change of the linear solver
+- In the sample code, linear solver is done by mldvidie (A\b)
+- This is LU decomposition (?) and way faster than iterative methods for this example
+- Sample iterative solver is tested using gmres() but it would be 150x slower than the default
+  - Using ilu() preconditioner reduces the number gmres iterations as 10% but wall time doesnt's show much differences
+- Default - 8.7 sec
+- Gmres with preconditioner - 797sec
+- Inexact Newton - 783sec

@@ -44,14 +44,15 @@ S=Fluid.swc*ones(N,1); % Initial saturation
 Pc =[0; 1]; Tt=0;      % For production curves
 global prop;
 prop.nl_it = [];
+prop.lin_it = [];
 for tp=1:ND/Pt;
   [P,V]=Pres(Grid,S,Fluid,Q);
   for ts=1:Pt/St;
-    S=NewtRaph(Grid,S,Fluid,V,Q,St);
+    printf("########### ts = %d\n",ts);
+    S=NewtRaph2(Grid,S,Fluid,V,Q,St);    
     subplot('position' ,[0.05 .1 .4 .8]);
     pcolor(reshape(S,Grid.Nx,Grid.Ny,Grid.Nz)');
     shading flat; caxis([Fluid.swc 1-Fluid.sor ]); 
-
     [Mw,Mo]=RelPerm(S(N),Fluid); Mt=Mw+Mo;
     Tt=[Tt,(tp-1)*Pt+ts*St];
     Pc=[Pc,[Mw/Mt; Mo/Mt]];
