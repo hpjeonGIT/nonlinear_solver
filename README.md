@@ -35,6 +35,7 @@ Solve Ax=b
   - x = x + dx, while dx from | f + f' dx | <= eta |f|
 
 ## ASPIN
+- http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.125.4868&rep=rep1&type=pdf
 - Ref: https://arxiv.org/pdf/1607.04254.pdf
 - ASPIN is a modified inexact Newton, using nonlinear preconditioner
 - Solving |f + f'dx| <= eta |f| => solve |F + F'dx| <=eta |F|
@@ -52,7 +53,7 @@ Solve Ax=b
   - Locality is gauranteed as sparse system. Just nonlinear
   - Let's introduce F = \sum T_i
   - In subdomain, f_s_i(u - T_i(u)) = 0
-
+- From Gander, on the origins of linear and non-linear preconditioning
 Instead of solving:
 f1(x1,x2,..., xN) = 0
 f2(x1,x,2,...,xN) = 0
@@ -63,13 +64,28 @@ x1 = G1(x2,...,xN)
 x2 = G2(x1,...,xN)
 ...
 xN = GN(x1,...,xN-1)
-
 - Advantage:
   - Localize Jacobian inverse, reducing computing
-  - 
-
-
-
+- https://link.springer.com/content/pdf/10.1007/s11242-015-0587-5.pdf
+  - skogestad called Cai's method as nonlinear domain decomposition preconditioning
+  - first level ASPIN - approximated Jacobian
+    - C: Compression from the global to local
+    - R: reconstruction
+    - for Ax=b, Preconditioner P = \sum Ri * inv(Ci A Ri) * Ci
+    - Approximated Jacobian = \sum Ri inv(Ci J(u)Ri) Ci J(u)
+- https://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/SNES/SNESASPIN.html
+  - According to this Petsc manual, preconditioner for linear solver is not applied as the nonlinear solver has the preconditioning.
+- http://www.ddm.org/DD13/CaiKY.pdf
+- https://pde.sciencesconf.org/data/program/cai_Lyon13.pdf
+  - For F1(x1,x2) = 0, F2(x1,x2) = 0
+  - Let T1 and T2 be F1(x1-T1,x2)=0, F2(x1,x2-T2)=0
+  - T1(x1,x2) + T2(x1,x2) = 0 is solved by ASPIN
+- https://kups.ub.uni-koeln.de/9845/1/CDS_TR-2019-17.pdf
+  - For F(u) = 0
+  - Ri F(u- PiTi(u)) = 0
+  - Fa = sum Pi Ti(u) = 0
+  - Newton Raphson for Fa
+    - u += - inv(DFa(u)) * Fa(u)
 ## In reservoir simulator
 T= t0, t1, t2, ... t_f
 At t_i, 
