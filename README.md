@@ -80,12 +80,20 @@ xN = GN(x1,...,xN-1)
   - For F1(x1,x2) = 0, F2(x1,x2) = 0
   - Let T1 and T2 be F1(x1-T1,x2)=0, F2(x1,x2-T2)=0
   - T1(x1,x2) + T2(x1,x2) = 0 is solved by ASPIN
+  - T1,2 often have better conditioning than F1,2 (why?)
 - https://kups.ub.uni-koeln.de/9845/1/CDS_TR-2019-17.pdf
   - For F(u) = 0
   - Ri F(u- PiTi(u)) = 0
   - Fa = sum Pi Ti(u) = 0
   - Newton Raphson for Fa
     - u += - inv(DFa(u)) * Fa(u)
+
+## Sample example
+- Solve `F1 = x1 + 0.2*x2**2 - 0.1745, F2 = x1**2 + 0.7*x2-0.2675`
+- 
+- Solve `F1 = .1*x1 + 0.2*x2**2 + x3, F2 = x1**2 + 0.7*x2 + 0.5*x3, F3 = x1 + x2 + x3`
+
+
 ## In reservoir simulator
 T= t0, t1, t2, ... t_f
 At t_i, 
