@@ -97,7 +97,17 @@ xN = GN(x1,...,xN-1)
   - T1 = (x1 + 0.1*x1*x2 + 0.2*x2*x2 -0.17975)/(1 + 0.1*x2)
 - Let F2(x1,x2-T2) = x1*x1 + 1.5*x1*(x2-T2) - 0.7 * (x2-T2) + 0.41125 =0
   - T2 = (x1*x1 + 1.5*x1*x2 - 0.7*x2 + 0.41125)/(1.5*x1 -0.7)
-- Ref: https://icerm.brown.edu/materials/Slides/tw-15-5/Nonlinear_Schwarz_Preconditioning_]_David_Keyes,_King_Abdullah_University_of_Science_&_Technology.pdf
+- Ref: https://icerm.brown.edu/materials/Slides/tw-15-5
+
+## Sample2 
+- Ref: Nonlinear_Schwarz_Preconditioning_]_David_Keyes,_King_Abdullah_University_of_Science_&_Technology.pdf
+- ASPIN reduces NR steps as a half
+- Inexact NT is 2x faster than exact NR
+  - The key of inexact NT is two fold loops 
+  - First loop is for the convergence. Residual check might be done
+  - Second loop is for the the condition of inequality |f  + df dx | <= eta |f|
+  - Iterating until the inequality, find the dx. When dx is found, check if the convergence is met. If not, iterate the first loop
+  - The key of inexact NT is that the total cost of the dual loop might be cheaper than the exact NT.
 
 ## In reservoir simulator
 T= t0, t1, t2, ... t_f
